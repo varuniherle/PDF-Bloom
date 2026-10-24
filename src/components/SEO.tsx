@@ -8,7 +8,7 @@ interface SEOProps {
 }
 
 const SITE_NAME = "PetalPDF";
-const BASE_URL = "https://pdf-bloom.vercel.app";
+const BASE_URL = "https://petal-pdf.vercel.app";
 
 export default function SEO({ title, description, path }: SEOProps) {
   const canonicalUrl = `${BASE_URL}${path}`;
