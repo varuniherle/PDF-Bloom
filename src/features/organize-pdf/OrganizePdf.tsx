@@ -13,6 +13,7 @@ import {
 import {
   getDocument,
   GlobalWorkerOptions,
+  type PDFDocumentLoadingTask,
   type PDFDocumentProxy,
 } from "pdfjs-dist";
 import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
@@ -29,6 +30,7 @@ export default function OrganizePdf() {
   const inputRef = useRef<HTMLInputElement>(null);
   const canvasRefs = useRef<Map<number, HTMLCanvasElement>>(new Map());
   const pdfRef = useRef<PDFDocumentProxy | null>(null);
+  const loadingTaskRef = useRef<PDFDocumentLoadingTask | null>(null);
   const renderTasksRef = useRef<
     Map<number, { cancel: () => void }>
   >(new Map());
@@ -47,10 +49,11 @@ export default function OrganizePdf() {
       renderTasksRef.current.forEach((task) => task.cancel());
       renderTasksRef.current.clear();
 
-      const pdf = pdfRef.current;
+      const loadingTask = loadingTaskRef.current;
       pdfRef.current = null;
+      loadingTaskRef.current = null;
 
-      if (pdf) void pdf.destroy();
+      if (loadingTask) void loadingTask.destroy();
     };
   }, []);
 
@@ -78,13 +81,14 @@ export default function OrganizePdf() {
 
       const previewPdf = await loadingTask.promise;
 
-      const oldPdf = pdfRef.current;
+      const oldLoadingTask = loadingTaskRef.current;
       pdfRef.current = previewPdf;
+      loadingTaskRef.current = loadingTask;
 
-      if (oldPdf) {
+      if (oldLoadingTask) {
         renderTasksRef.current.forEach((task) => task.cancel());
         renderTasksRef.current.clear();
-        await oldPdf.destroy();
+        await oldLoadingTask.destroy();
       }
 
       setFile(selectedFile);
@@ -266,8 +270,9 @@ export default function OrganizePdf() {
     renderTasksRef.current.forEach((task) => task.cancel());
     renderTasksRef.current.clear();
 
-    const oldPdf = pdfRef.current;
+    const oldLoadingTask = loadingTaskRef.current;
     pdfRef.current = null;
+    loadingTaskRef.current = null;
 
     setFile(null);
     setPages([]);
@@ -279,8 +284,8 @@ export default function OrganizePdf() {
       inputRef.current.value = "";
     }
 
-    if (oldPdf) {
-      await oldPdf.destroy();
+    if (oldLoadingTask) {
+      await oldLoadingTask.destroy();
     }
   }
 
