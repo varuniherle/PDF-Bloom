@@ -17,8 +17,8 @@ function AppRouter() {
           element={
             <>
               <SEO
-                title="PDF Bloom — Free Online PDF Tools"
-                description="Merge PDFs, split pages, organize documents, fill and sign PDFs, and convert images to PDF with PDF Bloom."
+                title="PetalPDF — Free Online PDF Tools"
+                description="Merge PDFs, split pages, organize documents, fill and sign PDFs, and convert images to PDF with PetalPDF."
                 path="/"
               />
               <Home />
@@ -31,8 +31,8 @@ function AppRouter() {
           element={
             <>
               <SEO
-                title="Merge PDF Files Online Free | PDF Bloom"
-                description="Combine multiple PDF files into one document with PDF Bloom's free online PDF merger."
+                title="Merge PDF Files Online Free | PetalPDF"
+                description="Combine multiple PDF files into one document with PetalPDF's free online PDF merger."
                 path="/merge-pdf"
               />
               <MergePdf />
@@ -45,8 +45,8 @@ function AppRouter() {
           element={
             <>
               <SEO
-                title="Split PDF Pages Online Free | PDF Bloom"
-                description="Split PDF documents and extract the pages you need with PDF Bloom's free online PDF splitter."
+                title="Split PDF Pages Online Free | PetalPDF"
+                description="Split PDF documents and extract the pages you need with PetalPDF's free online PDF splitter."
                 path="/split-pdf"
               />
               <SplitPdf />
@@ -59,8 +59,8 @@ function AppRouter() {
           element={
             <>
               <SEO
-                title="Fill and Sign PDF Online | PDF Bloom"
-                description="Fill out and sign PDF documents online with PDF Bloom's easy-to-use PDF tool."
+                title="Fill and Sign PDF Online | PetalPDF"
+                description="Fill out and sign PDF documents online with PetalPDF's easy-to-use PDF tool."
                 path="/fill-edit-pdf"
               />
               <FillEditPdf />
@@ -73,8 +73,8 @@ function AppRouter() {
           element={
             <>
               <SEO
-                title="Convert Images to PDF Online | PDF Bloom"
-                description="Convert JPG, PNG, and supported image files into PDF documents with PDF Bloom."
+                title="Convert Images to PDF Online | PetalPDF"
+                description="Convert JPG, PNG, and supported image files into PDF documents with PetalPDF."
                 path="/image-to-pdf"
               />
               <ImageToPdf />
@@ -87,8 +87,8 @@ function AppRouter() {
           element={
             <>
               <SEO
-                title="Organize PDF Pages Online | PDF Bloom"
-                description="Reorder, rotate, and remove PDF pages using PDF Bloom's free online PDF organizer."
+                title="Organize PDF Pages Online | PetalPDF"
+                description="Reorder, rotate, and remove PDF pages using PetalPDF's free online PDF organizer."
                 path="/organize-pdf"
               />
               <OrganizePdf />
