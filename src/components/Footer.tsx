@@ -11,7 +11,7 @@ function Footer() {
 
         <p className="flex flex-wrap items-center justify-center gap-1 text-xs text-gray-400">
           <Sparkles size={12} className="text-purple-400" />
-          PDF Bloom · I don’t trust PDF websites, so I built my own.
+          PetalPDF · I don’t trust PDF websites, so I built my own.
           <Sparkles size={12} className="text-purple-400" />
         </p>
 
