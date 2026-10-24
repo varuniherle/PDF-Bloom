@@ -8,7 +8,7 @@ import {
     ImagePlus,
     LoaderCircle,
     Trash2,
-    Upload,
+    
 } from "lucide-react";
 import {
     createImagesPdf,

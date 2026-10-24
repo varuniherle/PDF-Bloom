@@ -3,7 +3,6 @@ import {
   Combine,
   Scissors,
   FilePenLine,
-  PenTool,
   Image,
   Files,
 } from 'lucide-react'
