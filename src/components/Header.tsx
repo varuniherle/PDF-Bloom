@@ -10,8 +10,9 @@ function Header() {
         </p>
         <p className="mt-2 text-sm text-gray">
           Not mobile friendly yet. Please use a laptop. I'm working on it. 💅
-          It's a little buggy. <br></br>I will fix it eventually. I promise.
+          
         </p>
+        <p className="mt-2 text-sm text-gray" >It's a little buggy.I will fix it eventually. I promise.</p>
       </header>
     </div>
   )
