@@ -3,6 +3,7 @@ import { tools } from '../data/tools'
 import Header from '../components/Header'
 import SearchBar from '../components/SearchBar'
 import ToolGrid from '../components/ToolGrid'
+import Footer from '../components/Footer'
 
 function Home() {
   const [search, setSearch] = useState('')
@@ -21,6 +22,7 @@ function Home() {
         <SearchBar value={search} onChange={setSearch} />
         <ToolGrid tools={filteredTools} />
       </section>
+      <Footer />
     </main>
   )
 }

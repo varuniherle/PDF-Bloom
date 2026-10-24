@@ -1,14 +1,17 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  color: #352546;
-  background: #fdfaff;
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  color: #3b2150;
+  background: #fffafd;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --petal: #ff6fae;
+  --orchid: #a855f7;
 }
 
 * {
@@ -19,9 +22,114 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  /* Soft blush + lilac glow instead of a flat background */
+  background:
+    radial-gradient(620px 420px at 6% 0%, #ffe3f1 0%, transparent 70%),
+    radial-gradient(720px 520px at 100% 8%, #efe2ff 0%, transparent 70%),
+    radial-gradient(560px 420px at 55% 100%, #ffe9f4 0%, transparent 70%),
+    #fffafd;
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Fredoka', 'Outfit', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.005em;
 }
 
 button,
 input {
   font: inherit;
+}
+
+::selection {
+  background: #ffcfe6;
+  color: #3b2150;
+}
+
+:focus-visible {
+  outline: 3px solid #ff9ccb;
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+/* ---------- Reusable pieces ---------- */
+
+/* Page title: pink to orchid */
+.bloom-title {
+  background: linear-gradient(90deg, var(--petal), var(--orchid));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Pill search bar */
+.bloom-search {
+  border-radius: 999px;
+  border: 1.5px solid #f3cfe6;
+  background: rgba(255, 255, 255, 0.9);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.bloom-search:focus-within {
+  border-color: #ff9ccb;
+  box-shadow: 0 0 0 4px rgba(255, 156, 203, 0.25);
+}
+.bloom-search input:focus-visible {
+  outline: none;
+}
+
+/* Tool card: petal shape (one tighter corner), pastel icon chip */
+.tool-card {
+  position: relative;
+  border-radius: 30px 30px 30px 10px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1.5px solid #f6d8ec;
+  box-shadow: 0 10px 26px -14px rgba(190, 70, 160, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.tool-card:hover {
+  transform: translateY(-4px) rotate(-0.4deg);
+  border-color: #ff9ccb;
+  box-shadow: 0 18px 34px -16px rgba(236, 72, 153, 0.45);
+}
+
+.tool-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px 16px 16px 6px;
+  background: var(--chip, #f3e8ff);
+  color: var(--chip-ink, #a855f7);
+}
+
+.tool-arrow {
+  color: var(--petal);
+  transition: transform 0.2s ease;
+}
+.tool-card:hover .tool-arrow {
+  transform: translateX(5px);
+}
+
+/* A different pastel per card */
+.tool-card:nth-child(5n + 1) { --chip: #ffe0ef; --chip-ink: #ec4899; }
+.tool-card:nth-child(5n + 2) { --chip: #efe3ff; --chip-ink: #9333ea; }
+.tool-card:nth-child(5n + 3) { --chip: #ffe8d9; --chip-ink: #f0743c; }
+.tool-card:nth-child(5n + 4) { --chip: #dcf6ea; --chip-ink: #16a37a; }
+.tool-card:nth-child(5n + 5) { --chip: #fff2c7; --chip-ink: #d99a06; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-card,
+  .tool-arrow {
+    transition: none;
+  }
+  .tool-card:hover {
+    transform: none;
+  }
 }

@@ -286,6 +286,13 @@ export default function OrganizePdf() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
+      <button
+        type="button"
+        onClick={() => window.history.back()}
+        className="mb-5 text-sm text-purple-600 hover:text-purple-800"
+      >
+        ← Back to tools
+      </button>
       <header className="mb-8 text-center">
         <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100 text-purple-600">
           <FileText size={28} />
@@ -416,13 +423,12 @@ export default function OrganizePdf() {
                       setDraggedPageId(null);
                       setDragOverPageId(null);
                     }}
-                    className={`min-w-0 rounded-xl border bg-white p-3 transition ${
-                      draggedPageId === page.id
+                    className={`min-w-0 rounded-xl border bg-white p-3 transition ${draggedPageId === page.id
                         ? "scale-95 border-purple-400 opacity-40"
                         : dragOverPageId === page.id
                           ? "border-purple-500 bg-purple-50 ring-2 ring-purple-200"
                           : "border-gray-200 hover:border-purple-300"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="flex items-center gap-1 text-sm font-semibold text-gray-700">
