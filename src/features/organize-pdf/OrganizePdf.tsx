@@ -1,8 +1,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  ArrowDown,
-  ArrowUp,
   Download,
   FileText,
   GripVertical,
@@ -31,9 +29,9 @@ export default function OrganizePdf() {
   const inputRef = useRef<HTMLInputElement>(null);
   const canvasRefs = useRef<Map<number, HTMLCanvasElement>>(new Map());
   const pdfRef = useRef<PDFDocumentProxy | null>(null);
-  const renderTasksRef = useRef<Map<number, { cancel: () => void }>>(
-    new Map(),
-  );
+  const renderTasksRef = useRef<
+    Map<number, { cancel: () => void }>
+  >(new Map());
 
   const [file, setFile] = useState<File | null>(null);
   const [pages, setPages] = useState<PdfPageItem[]>([]);
@@ -43,7 +41,7 @@ export default function OrganizePdf() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // Clean up PDF.js render tasks and the loaded document.
+  // Clean up PDF.js resources when the component unmounts.
   useEffect(() => {
     return () => {
       renderTasksRef.current.forEach((task) => task.cancel());
@@ -72,10 +70,8 @@ export default function OrganizePdf() {
     setIsLoading(true);
 
     try {
-      // Validate using pdf-lib.
       const count = await getPdfPageCount(selectedFile);
 
-      // Load a separate PDF.js document for real page thumbnails.
       const loadingTask = getDocument({
         data: await selectedFile.arrayBuffer(),
       });
@@ -111,7 +107,7 @@ export default function OrganizePdf() {
     }
   }
 
-  // Render thumbnails after the PDF and page cards are ready.
+  // Render real PDF page thumbnails.
   useEffect(() => {
     const pdf = pdfRef.current;
     if (!pdf || pages.length === 0) return;
@@ -127,6 +123,9 @@ export default function OrganizePdf() {
 
         try {
           const page = await pdf!.getPage(item.id);
+
+          if (cancelled) return;
+
           const rotation = (page.rotate + item.rotation) % 360;
           const viewport = page.getViewport({
             scale: 0.65,
@@ -150,12 +149,11 @@ export default function OrganizePdf() {
           await renderTask.promise;
           renderTasksRef.current.delete(item.id);
         } catch (err) {
-          // Ignore renders cancelled during reorder/unmount.
           if (
             err instanceof Error &&
             err.name !== "RenderingCancelledException"
           ) {
-            console.error("Thumbnail render failed:", err);
+            console.error("Thumbnail rendering failed:", err);
           }
         }
       }
@@ -183,8 +181,8 @@ export default function OrganizePdf() {
       }
 
       const next = [...current];
-      const [moved] = next.splice(fromIndex, 1);
-      next.splice(toIndex, 0, moved);
+      const [movedPage] = next.splice(fromIndex, 1);
+      next.splice(toIndex, 0, movedPage);
 
       return next;
     });
@@ -197,8 +195,12 @@ export default function OrganizePdf() {
       return;
     }
 
-    const fromIndex = pages.findIndex((page) => page.id === draggedPageId);
-    const toIndex = pages.findIndex((page) => page.id === targetPageId);
+    const fromIndex = pages.findIndex(
+      (page) => page.id === draggedPageId,
+    );
+    const toIndex = pages.findIndex(
+      (page) => page.id === targetPageId,
+    );
 
     movePage(fromIndex, toIndex);
     setDraggedPageId(null);
@@ -216,7 +218,9 @@ export default function OrganizePdf() {
   }
 
   function deletePage(id: number) {
-    setPages((current) => current.filter((page) => page.id !== id));
+    setPages((current) =>
+      current.filter((page) => page.id !== id),
+    );
   }
 
   async function downloadPdf() {
@@ -238,8 +242,10 @@ export default function OrganizePdf() {
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
+
       link.href = url;
       link.download = `${file.name.replace(/\.pdf$/i, "")}-organized.pdf`;
+
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -247,7 +253,9 @@ export default function OrganizePdf() {
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Could not generate the PDF.",
+        err instanceof Error
+          ? err.message
+          : "Could not generate the PDF.",
       );
     } finally {
       setIsSaving(false);
@@ -267,7 +275,9 @@ export default function OrganizePdf() {
     setDragOverPageId(null);
     setError("");
 
-    if (inputRef.current) inputRef.current.value = "";
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
 
     if (oldPdf) {
       await oldPdf.destroy();
@@ -281,7 +291,10 @@ export default function OrganizePdf() {
           <FileText size={28} />
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900">Organize PDF</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Organize PDF
+        </h1>
+
         <p className="mt-2 text-gray-500">
           Drag, rotate, and remove pages to make your PDF just right.
         </p>
@@ -312,12 +325,16 @@ export default function OrganizePdf() {
                 className="mb-3 animate-spin text-purple-500"
               />
             ) : (
-              <Upload size={34} className="mb-3 text-purple-500" />
+              <Upload
+                size={34}
+                className="mb-3 text-purple-500"
+              />
             )}
 
             <span className="font-semibold text-gray-800">
               {isLoading ? "Opening PDF..." : "Choose a PDF"}
             </span>
+
             <span className="mt-1 text-sm text-gray-500">
               Your PDF is processed in the browser.
             </span>
@@ -329,8 +346,10 @@ export default function OrganizePdf() {
                 <h2 className="truncate font-semibold text-gray-800">
                   {file.name}
                 </h2>
+
                 <p className="mt-1 text-sm text-gray-500">
-                  {pages.length} {pages.length === 1 ? "page" : "pages"} remaining
+                  {pages.length}{" "}
+                  {pages.length === 1 ? "page" : "pages"} remaining
                 </p>
               </div>
 
@@ -345,15 +364,18 @@ export default function OrganizePdf() {
             </div>
 
             <p className="mb-4 mt-6 text-sm text-gray-500">
-              <GripVertical size={16} className="mr-1 inline-block" />
-              Drag a page onto another page to change its position. Use the
-              controls on each card to rotate or delete pages.
+              <GripVertical
+                size={16}
+                className="mr-1 inline-block"
+              />
+              Drag and drop page cards to change their order. Rotate or
+              delete pages using the controls below each preview.
             </p>
 
             {pages.length === 0 ? (
               <div className="rounded-xl bg-purple-50 p-8 text-center text-gray-600">
-                All pages have been removed. Upload another PDF or choose a
-                different file.
+                All pages have been removed. Upload another PDF or choose
+                a different file.
               </div>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -375,7 +397,12 @@ export default function OrganizePdf() {
                       setDragOverPageId(page.id);
                     }}
                     onDragLeave={(event) => {
-                      if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+                      const related = event.relatedTarget;
+
+                      if (
+                        !(related instanceof Node) ||
+                        !event.currentTarget.contains(related)
+                      ) {
                         setDragOverPageId((current) =>
                           current === page.id ? null : current,
                         );
@@ -399,9 +426,13 @@ export default function OrganizePdf() {
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="flex items-center gap-1 text-sm font-semibold text-gray-700">
-                        <GripVertical size={16} className="text-gray-400" />
+                        <GripVertical
+                          size={16}
+                          className="text-gray-400"
+                        />
                         Page {page.id}
                       </span>
+
                       <span className="text-xs text-gray-400">
                         Position {index + 1}
                       </span>
@@ -426,7 +457,7 @@ export default function OrganizePdf() {
                         type="button"
                         onClick={() => rotatePage(page.id)}
                         aria-label={`Rotate page ${page.id}`}
-                        title="Rotate page 90°"
+                        title="Rotate page 90 degrees"
                         className="flex flex-1 items-center justify-center gap-1 rounded-lg border border-gray-200 px-2 py-2 text-sm text-gray-600 hover:bg-purple-50 hover:text-purple-700"
                       >
                         <RotateCw size={16} />
@@ -441,28 +472,6 @@ export default function OrganizePdf() {
                         className="flex items-center justify-center rounded-lg border border-red-100 px-3 py-2 text-red-500 hover:bg-red-50"
                       >
                         <Trash2 size={16} />
-                      </button>
-                    </div>
-
-                    <div className="mt-2 flex gap-2">
-                      <button
-                        type="button"
-                        disabled={index === 0}
-                        onClick={() => movePage(index, -1)}
-                        className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-gray-50 py-2 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30"
-                      >
-                        <ArrowUp size={14} />
-                        Move up
-                      </button>
-
-                      <button
-                        type="button"
-                        disabled={index === pages.length - 1}
-                        onClick={() => movePage(index, 1)}
-                        className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-gray-50 py-2 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30"
-                      >
-                        <ArrowDown size={14} />
-                        Move down
                       </button>
                     </div>
                   </article>
@@ -490,7 +499,10 @@ export default function OrganizePdf() {
           >
             {isSaving ? (
               <>
-                <LoaderCircle size={20} className="animate-spin" />
+                <LoaderCircle
+                  size={20}
+                  className="animate-spin"
+                />
                 Saving PDF...
               </>
             ) : (
